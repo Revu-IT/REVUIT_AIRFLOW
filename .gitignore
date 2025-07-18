@@ -1,0 +1,11 @@
+logs/
+keys/*
+data/*
+model/bert/*
+model/tokenizer/*
+airflow.db
+airflow.cfg
+airflow.cfg
+
+.vscode/
+__pycache__/
