@@ -2,7 +2,9 @@ logs/
 keys/*
 data/*
 model/bert/*
+!model/bert/.gitkeep
 model/tokenizer/*
+!model/tokenizer/.gitkeep
 airflow.db
 airflow.cfg
 airflow.cfg
