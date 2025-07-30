@@ -1,6 +1,8 @@
 logs/
 keys/*
+!keys/.gitkeep
 data/*
+!data/department_info.csv
 model/bert/*
 !model/bert/.gitkeep
 model/tokenizer/*
@@ -8,6 +10,9 @@ model/tokenizer/*
 airflow.db
 airflow.cfg
 airflow.cfg
+.env
+data_merge.py
+encoding.py
 
 .vscode/
 __pycache__/

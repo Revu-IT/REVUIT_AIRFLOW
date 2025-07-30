@@ -41,23 +41,22 @@ def clean_text(text):
 
     return ' '.join(tokens)
 
-def preprocess_reviews(input_path, output_path):
-    df_all = pd.read_csv(input_path, encoding='utf-8-sig')
-    print(f"[INFO] 전체 리뷰 개수: {len(df_all)}")
+def preprocess_reviews(path):
+    df_all = pd.read_csv(path, encoding='utf-8-sig')
+    print(f"✅ 전체 리뷰 개수: {len(df_all)}")
 
     # 기존 전처리 파일이 있다면 불러오기
-    if os.path.exists(output_path):
-        df_prev = pd.read_csv(output_path, encoding='utf-8-sig')
-        print(f"[INFO] 기존 전처리 리뷰 개수: {len(df_prev)}")
+    if 'cleaned_text' in df_all.columns:
+        df_prev = df_all[df_all['cleaned_text'].notna()]
+        print(f"✅ 기존 전처리 리뷰 개수: {len(df_prev)}")
 
-        # 이전에 처리된 리뷰 내용만 필터링해서 제외
-        prev_contents = set(df_prev['content'])
-        df_new = df_all[~df_all['content'].isin(prev_contents)]
-        print(f"[INFO] 새로 처리할 리뷰 개수: {len(df_new)}")
+        df_new = df_all[df_all['cleaned_text'].isna()].copy()
+        print(f"✅ 새로 처리할 리뷰 개수: {len(df_new)}")
     else:
+        df_all['cleaned_text'] = None
         df_prev = pd.DataFrame()
-        df_new = df_all
-        print("[INFO] 기존 전처리 파일 없음. 전체 리뷰 처리")
+        df_new = df_all.copy()
+        print("✅ 기존 전처리 컬럼 없음. 전체 리뷰 처리")
 
     # 전처리
     df_new['cleaned_text'] = df_new['content'].apply(clean_text)
@@ -65,14 +64,13 @@ def preprocess_reviews(input_path, output_path):
     df_new = df_new[(df_new['score'] >= 1) & (df_new['score'] <= 5)]
     df_new = df_new.drop_duplicates()
 
-    print(f"[INFO] 전처리 후 새 리뷰 수: {len(df_new)}")
+    print(f"✅ 전처리 후 새 리뷰 수: {len(df_new)}")
 
-    # 기존 데이터와 병합해서 저장
-    df_final = pd.concat([df_prev, df_new], ignore_index=True)
-    df_final.drop_duplicates(subset=['content', 'cleaned_text'], inplace=True)
-    df_final.to_csv(output_path, index=False, encoding='utf-8-sig')
-
-    print(f"✅ 최종 저장 완료: {output_path}, 총 {len(df_final)}개")
+    df_all = pd.concat([df_all, df_new], ignore_index=True)
+    df_all.drop_duplicates(subset=["content", "date"], keep="last", inplace=True)
+    df_all = df_all.sort_values(by="date", ascending=False)
+    df_all.to_csv(path, index=False, encoding="utf-8-sig")
+    print(f"✅ 최종 저장 완료: {path}, 총 {len(df_all)}개")
 
 # 사용 예시
-preprocess_reviews('/opt/airflow/data/G_review.csv', '/opt/airflow/data/G_review_okt.csv')
+preprocess_reviews('/opt/airflow/data/G_review_result.csv')

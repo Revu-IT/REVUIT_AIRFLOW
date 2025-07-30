@@ -9,3 +9,4 @@ JPype1
 transformers[torch]
 torch
 numpy
+openai

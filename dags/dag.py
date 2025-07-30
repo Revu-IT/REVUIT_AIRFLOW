@@ -21,20 +21,13 @@ KEYS_FOLDER = os.path.join(AIRFLOW_HOME, "keys")
 CRAWL_SCRIPT = os.path.join(SCRIPTS_FOLDER, "crawl.py")
 OKT_SCRIPT = os.path.join(SCRIPTS_FOLDER, "okt.py")
 SENTIMENT_SCRIPT = os.path.join(SCRIPTS_FOLDER, "sentiment.py")
+DEPARTMENT_SCRIPT = os.path.join(SCRIPTS_FOLDER, "department.py")
 
 # 서비스 계정 파일 경로
 SERVICE_ACCOUNT_FILE = os.path.join(KEYS_FOLDER, "airflow-463709-f8a4c39f2f87.json")
 
-# 구글 드라이브 폴더 ID
-FOLDER_IDS = {
-    "크롤링": "157BLZMwIB2dxY7kllI4Tnf-x41TC2Q86",
-    "데이터 전처리": "1ywh9Id4U0jEy1RXOWFL84EyS6xIUncNu",
-    "감정 분석": "1vue5S1_z9gOPcbgkHDFPoQHnc9KOluy2"
-}
-
 # 스크립트 모듈 로드 및 실행 함수
 def execute_python_script(script_path):
-    """스크립트를 동적으로 임포트하고 실행하는 함수"""
     print(f"스크립트 경로: {script_path}")
     
     # 스크립트 파일 존재 확인
@@ -82,6 +75,10 @@ def run_general_preprocessing():
 def run_sentiment_preprocessing():
     print(f"감정 분석 전처리 스크립트 실행 중... 경로: {SENTIMENT_SCRIPT}")
     execute_python_script(SENTIMENT_SCRIPT)
+    
+def run_department_classification():
+    print(f"부서 분류 스크립트 실행 중... 경로: {DEPARTMENT_SCRIPT}")
+    execute_python_script(DEPARTMENT_SCRIPT)
 
 # 구글 드라이브 업로드
 def upload_results_to_drive():
@@ -92,9 +89,10 @@ def upload_results_to_drive():
     if not os.path.exists(SERVICE_ACCOUNT_FILE):
         raise FileNotFoundError(f"서비스 계정 파일을 찾을 수 없습니다: {SERVICE_ACCOUNT_FILE}")
     
-    # 데이터 폴더 확인
-    if not os.path.exists(DATA_FOLDER):
-        raise FileNotFoundError(f"데이터 폴더를 찾을 수 없습니다: {DATA_FOLDER}")
+    # 업로드할 파일 경로
+    result_file = os.path.join(DATA_FOLDER, "G_review_result.csv")
+    if not os.path.exists(result_file):
+        raise FileNotFoundError(f"G_review_result.csv 파일이 존재하지 않습니다: {result_file}")
     
     # 구글 드라이브 인증
     credentials = service_account.Credentials.from_service_account_file(
@@ -104,31 +102,32 @@ def upload_results_to_drive():
     
     service = build('drive', 'v3', credentials=credentials)
     
-    # 데이터 폴더 내 파일 업로드
-    uploaded_files = 0
-    for filename in os.listdir(DATA_FOLDER):
-        filepath = os.path.join(DATA_FOLDER, filename)
-        
-        if os.path.isfile(filepath):
-            # 파일 분류
-            if "okt" in filename:
-                folder_id = FOLDER_IDS["데이터 전처리"]
-            elif "bert" in filename:
-                folder_id = FOLDER_IDS["감정 분석"]
-            else:
-                folder_id = FOLDER_IDS["크롤링"]
-                
-            file_metadata = {
-                'name': filename,
-                'parents': [folder_id]
-            }
-            
-            media = MediaFileUpload(filepath, resumable=True)
-            file = service.files().create(body=file_metadata, media_body=media, fields='id', supportsAllDrives=True).execute()
-            uploaded_files += 1
-            print(f"파일 업로드 완료: {filename}, ID: {file.get('id')}")
+    # 드라이브 폴더 ID
+    folder_id = "1FBcOCEqnQ6NtLNgrxgwXb0LtSaBmsBoh"
     
-    print(f"총 {uploaded_files}개 파일 업로드 완료")
+    # 기존 같은 이름의 파일 삭제
+    print("🔍 기존 동일 이름 파일 확인 중...")
+    query = f"'{folder_id}' in parents and name = 'G_review_result.csv' and trashed = false"
+    response = service.files().list(q=query, spaces='drive', fields='files(id, name)').execute()
+    for file in response.get('files', []):
+        service.files().delete(fileId=file['id']).execute()
+        print(f"🗑️ 기존 파일 삭제됨: {file['name']} (ID: {file['id']})")
+    
+    # 새 파일 업로드
+    file_metadata = {
+        'name': 'G_review_result.csv',
+        'parents': [folder_id]
+    }
+    
+    media = MediaFileUpload(result_file, resumable=True)
+    uploaded_file = service.files().create(
+        body=file_metadata,
+        media_body=media,
+        fields='id',
+        supportsAllDrives=True
+    ).execute()
+    
+    print(f"✅ G_review_result.csv 업로드 완료, ID: {uploaded_file.get('id')}")
 
 # DAG 정의
 with DAG(
@@ -154,10 +153,15 @@ with DAG(
         python_callable=run_sentiment_preprocessing
     )
     
+    department_classification = PythonOperator(
+        task_id="run_department_classification",
+        python_callable=run_department_classification
+    )
+    
     upload_to_drive = PythonOperator(
         task_id="upload_results_to_drive",
         python_callable=upload_results_to_drive
     )
     
     # 태스크 의존성 설정
-    crawling >> general_preprocessing >> sentiment_preprocessing >> upload_to_drive
+    crawling >> general_preprocessing >> sentiment_preprocessing >> department_classification >> upload_to_drive

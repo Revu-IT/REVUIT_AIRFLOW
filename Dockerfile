@@ -4,7 +4,7 @@ USER root
 
 # Java 설치
 RUN apt-get update && \
-    apt-get install -y default-jdk && \
+    apt-get install -y default-jdk g++ && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64

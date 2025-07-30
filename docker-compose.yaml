@@ -2,6 +2,7 @@
 x-airflow-common: &airflow-common
     build: .
     environment: &airflow-common-env
+        OPENAI_API_KEY: ${OPENAI_API_KEY}
         AIRFLOW__CORE__EXECUTOR: CeleryExecutor
         AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
         AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
