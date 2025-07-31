@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 
+# ⚠️ 각자의 이커머스으로 변경
 app_id = 'com.ebay.kr.gmarket'
 file_path = '/opt/airflow/data/G_review_result.csv'
 BATCH_SIZE = 200

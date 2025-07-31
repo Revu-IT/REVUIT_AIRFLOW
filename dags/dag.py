@@ -12,7 +12,7 @@ from googleapiclient.http import MediaFileUpload
 AIRFLOW_HOME = "/opt/airflow"
 DAGS_FOLDER = os.path.join(AIRFLOW_HOME, "dags")
 
-# 각 폴더 경로 설정 - DAGs 폴더와 같은 레벨에 있는 경로
+# 각 폴더 경로 설정
 SCRIPTS_FOLDER = os.path.join(AIRFLOW_HOME, "scripts")
 DATA_FOLDER = os.path.join(AIRFLOW_HOME, "data")
 KEYS_FOLDER = os.path.join(AIRFLOW_HOME, "keys")
@@ -24,7 +24,7 @@ SENTIMENT_SCRIPT = os.path.join(SCRIPTS_FOLDER, "sentiment.py")
 DEPARTMENT_SCRIPT = os.path.join(SCRIPTS_FOLDER, "department.py")
 
 # 서비스 계정 파일 경로
-SERVICE_ACCOUNT_FILE = os.path.join(KEYS_FOLDER, "airflow-463709-f8a4c39f2f87.json")
+SERVICE_ACCOUNT_FILE = os.path.join(KEYS_FOLDER, "airflow-463709-f8a4c39f2f87.json") # ⚠️ 각자 서비스 계정 파일명으로 변경
 
 # 스크립트 모듈 로드 및 실행 함수
 def execute_python_script(script_path):
@@ -89,7 +89,7 @@ def upload_results_to_drive():
     if not os.path.exists(SERVICE_ACCOUNT_FILE):
         raise FileNotFoundError(f"서비스 계정 파일을 찾을 수 없습니다: {SERVICE_ACCOUNT_FILE}")
     
-    # 업로드할 파일 경로
+    # 업로드할 파일 경로 (⚠️ 각자 이커머스명으로 변경)
     result_file = os.path.join(DATA_FOLDER, "G_review_result.csv")
     if not os.path.exists(result_file):
         raise FileNotFoundError(f"G_review_result.csv 파일이 존재하지 않습니다: {result_file}")
@@ -107,13 +107,13 @@ def upload_results_to_drive():
     
     # 기존 같은 이름의 파일 삭제
     print("🔍 기존 동일 이름 파일 확인 중...")
-    query = f"'{folder_id}' in parents and name = 'G_review_result.csv' and trashed = false"
+    query = f"'{folder_id}' in parents and name = 'G_review_result.csv' and trashed = false" # ⚠️ 각자 이커머스명으로 변경
     response = service.files().list(q=query, spaces='drive', fields='files(id, name)').execute()
     for file in response.get('files', []):
         service.files().delete(fileId=file['id']).execute()
         print(f"🗑️ 기존 파일 삭제됨: {file['name']} (ID: {file['id']})")
     
-    # 새 파일 업로드
+    # 새 파일 업로드 (⚠️ 각자 이커머스명으로 변경)
     file_metadata = {
         'name': 'G_review_result.csv',
         'parents': [folder_id]
@@ -131,7 +131,7 @@ def upload_results_to_drive():
 
 # DAG 정의
 with DAG(
-    dag_id="gyuri_pipeline_controller",
+    dag_id="reviewit_pipeline_controller",
     schedule_interval="0 9 * * *",  # 매일 아침 9시
     start_date=datetime(2023, 1, 1),
     catchup=False,

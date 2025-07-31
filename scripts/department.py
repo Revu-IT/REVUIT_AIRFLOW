@@ -7,7 +7,7 @@ from openai import OpenAI
 AIRFLOW_HOME = "/opt/airflow"
 DATA_FOLDER = os.path.join(AIRFLOW_HOME, "data")
 DEPT_INFO_PATH = os.path.join(DATA_FOLDER, "department_info.csv")
-REVIEW_PATH = os.path.join(DATA_FOLDER, "G_review_result.csv")
+REVIEW_PATH = os.path.join(DATA_FOLDER, "G_review_result.csv") # ⚠️ 각자 이커머스명으로 변경
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))  # .env에 API 키 설정
 

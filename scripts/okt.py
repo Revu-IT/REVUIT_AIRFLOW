@@ -72,5 +72,5 @@ def preprocess_reviews(path):
     df_all.to_csv(path, index=False, encoding="utf-8-sig")
     print(f"✅ 최종 저장 완료: {path}, 총 {len(df_all)}개")
 
-# 사용 예시
+# 사용 예시 (⚠️ 각자 이커머스명으로 변경)
 preprocess_reviews('/opt/airflow/data/G_review_result.csv')
