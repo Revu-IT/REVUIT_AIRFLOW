@@ -73,4 +73,4 @@ def preprocess_reviews(path):
     print(f"✅ 최종 저장 완료: {path}, 총 {len(df_all)}개")
 
 # 사용 예시
-preprocess_reviews('/opt/airflow/data/G_review_result.csv')
+preprocess_reviews('/opt/airflow/data/11_review_result.csv') # 각자 이커머스에 맞게 수정

@@ -5,8 +5,8 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 
-app_id = 'com.ebay.kr.gmarket'
-file_path = '/opt/airflow/data/G_review_result.csv'
+app_id = 'com.elevenst'
+file_path = '/opt/airflow/data/11_review_result.csv' # 각자 이커머스에 맞게 수정
 BATCH_SIZE = 200
 TARGET_COUNT = 30_500
 
@@ -29,7 +29,7 @@ if os.path.exists(file_path):
         df_old['date'] = np.nan
 else:
     start_date = datetime(2023, 1, 1)
-    df_old = pd.DataFrame()
+    df_old = pd.DataFrame(columns=['date'])
 
 print(f"✅ 크롤링 시작 기준일: {start_date}")
 

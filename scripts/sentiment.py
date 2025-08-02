@@ -8,8 +8,8 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification, Trai
 AIRFLOW_HOME = "/opt/airflow"
 DATA_FOLDER = os.path.join(AIRFLOW_HOME, "data")
 MODEL_FOLDER = os.path.join(AIRFLOW_HOME, "model")
-INPUT_PATH = os.path.join(DATA_FOLDER, "G_review_result.csv")
-OUTPUT_PATH = os.path.join(DATA_FOLDER, "G_review_result.csv")
+INPUT_PATH = os.path.join(DATA_FOLDER, "11_review_result.csv") # 각자 이커머스에 맞게 수정
+OUTPUT_PATH = os.path.join(DATA_FOLDER, "11_review_result.csv") # 각자 이커머스에 맞게 수정
 MODEL_PATH = os.path.join(MODEL_FOLDER, "bert")
 TOKENIZER_PATH = os.path.abspath(os.path.join(MODEL_FOLDER, "tokenizer"))
 

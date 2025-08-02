@@ -4,9 +4,9 @@ from datetime import datetime
 import os
 import sys
 import importlib.util
-from google.oauth2 import service_account
-from googleapiclient.discovery import build
-from googleapiclient.http import MediaFileUpload
+import boto3
+from botocore.exceptions import NoCredentialsError
+from dotenv import load_dotenv
 
 # 에어플로우 환경 경로 설정
 AIRFLOW_HOME = "/opt/airflow"
@@ -15,16 +15,12 @@ DAGS_FOLDER = os.path.join(AIRFLOW_HOME, "dags")
 # 각 폴더 경로 설정 - DAGs 폴더와 같은 레벨에 있는 경로
 SCRIPTS_FOLDER = os.path.join(AIRFLOW_HOME, "scripts")
 DATA_FOLDER = os.path.join(AIRFLOW_HOME, "data")
-KEYS_FOLDER = os.path.join(AIRFLOW_HOME, "keys")
 
 # 스크립트 파일 경로
 CRAWL_SCRIPT = os.path.join(SCRIPTS_FOLDER, "crawl.py")
 OKT_SCRIPT = os.path.join(SCRIPTS_FOLDER, "okt.py")
 SENTIMENT_SCRIPT = os.path.join(SCRIPTS_FOLDER, "sentiment.py")
 DEPARTMENT_SCRIPT = os.path.join(SCRIPTS_FOLDER, "department.py")
-
-# 서비스 계정 파일 경로
-SERVICE_ACCOUNT_FILE = os.path.join(KEYS_FOLDER, "airflow-463709-f8a4c39f2f87.json")
 
 # 스크립트 모듈 로드 및 실행 함수
 def execute_python_script(script_path):
@@ -80,58 +76,47 @@ def run_department_classification():
     print(f"부서 분류 스크립트 실행 중... 경로: {DEPARTMENT_SCRIPT}")
     execute_python_script(DEPARTMENT_SCRIPT)
 
-# 구글 드라이브 업로드
-def upload_results_to_drive():
+# S3 업로드
+def upload_results_to_s3():
     print(f"데이터 폴더 경로: {DATA_FOLDER}")
-    print(f"서비스 계정 파일 경로: {SERVICE_ACCOUNT_FILE}")
-    
-    # 서비스 계정 파일 확인
-    if not os.path.exists(SERVICE_ACCOUNT_FILE):
-        raise FileNotFoundError(f"서비스 계정 파일을 찾을 수 없습니다: {SERVICE_ACCOUNT_FILE}")
-    
-    # 업로드할 파일 경로
-    result_file = os.path.join(DATA_FOLDER, "G_review_result.csv")
+
+    result_file = os.path.join(DATA_FOLDER, "11_review_result.csv") # 각자 이커머스에 맞게 수정
     if not os.path.exists(result_file):
-        raise FileNotFoundError(f"G_review_result.csv 파일이 존재하지 않습니다: {result_file}")
+        raise FileNotFoundError(f"11_review_result.csv 파일이 존재하지 않습니다: {result_file}")
     
-    # 구글 드라이브 인증
-    credentials = service_account.Credentials.from_service_account_file(
-        SERVICE_ACCOUNT_FILE,
-        scopes=["https://www.googleapis.com/auth/drive"]
+    company_name = os.getenv("COMPANY_NAME", "default_company")
+    bucket_name = os.getenv("S3_BUCKET_NAME")
+    aws_access_key = os.getenv("AWS_ACCESS_KEY_ID")
+    aws_secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
+    aws_region = os.getenv("AWS_REGION")
+
+    if not bucket_name:
+        raise ValueError("S3_BUCKET_NAME 환경 변수가 설정되지 않았습니다")
+
+    s3_key = f"airflow/{company_name}.csv"
+    print(f"업로드 대상 S3 경로: s3://{bucket_name}/{s3_key}")
+
+    # boto3 클라이언트 생성
+    s3 = boto3.client(
+        "s3",
+        aws_access_key_id=aws_access_key,
+        aws_secret_access_key=aws_secret_key,
+        region_name=aws_region
     )
-    
-    service = build('drive', 'v3', credentials=credentials)
-    
-    # 드라이브 폴더 ID
-    folder_id = "1FBcOCEqnQ6NtLNgrxgwXb0LtSaBmsBoh"
-    
-    # 기존 같은 이름의 파일 삭제
-    print("🔍 기존 동일 이름 파일 확인 중...")
-    query = f"'{folder_id}' in parents and name = 'G_review_result.csv' and trashed = false"
-    response = service.files().list(q=query, spaces='drive', fields='files(id, name)').execute()
-    for file in response.get('files', []):
-        service.files().delete(fileId=file['id']).execute()
-        print(f"🗑️ 기존 파일 삭제됨: {file['name']} (ID: {file['id']})")
-    
-    # 새 파일 업로드
-    file_metadata = {
-        'name': 'G_review_result.csv',
-        'parents': [folder_id]
-    }
-    
-    media = MediaFileUpload(result_file, resumable=True)
-    uploaded_file = service.files().create(
-        body=file_metadata,
-        media_body=media,
-        fields='id',
-        supportsAllDrives=True
-    ).execute()
-    
-    print(f"✅ G_review_result.csv 업로드 완료, ID: {uploaded_file.get('id')}")
+
+    try:
+        s3.upload_file(result_file, bucket_name, s3_key)
+        print(f"✅ S3 업로드 성공: s3://{bucket_name}/{s3_key}")
+    except NoCredentialsError:
+        print("❌ AWS 자격 증명이 누락되었습니다.")
+        raise
+    except Exception as e:
+        print(f"❌ 업로드 실패: {str(e)}")
+        raise
 
 # DAG 정의
 with DAG(
-    dag_id="gyuri_pipeline_controller",
+    dag_id="revuit_pipeline_controller",
     schedule_interval="0 9 * * *",  # 매일 아침 9시
     start_date=datetime(2023, 1, 1),
     catchup=False,
@@ -158,10 +143,10 @@ with DAG(
         python_callable=run_department_classification
     )
     
-    upload_to_drive = PythonOperator(
-        task_id="upload_results_to_drive",
-        python_callable=upload_results_to_drive
+    upload_to_s3 = PythonOperator(
+        task_id="upload_results_to_s3",
+        python_callable=upload_results_to_s3
     )
     
     # 태스크 의존성 설정
-    crawling >> general_preprocessing >> sentiment_preprocessing >> department_classification >> upload_to_drive
+    crawling >> general_preprocessing >> sentiment_preprocessing >> department_classification >> upload_to_s3
