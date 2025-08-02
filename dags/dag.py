@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 AIRFLOW_HOME = "/opt/airflow"
 DAGS_FOLDER = os.path.join(AIRFLOW_HOME, "dags")
 
-# 각 폴더 경로 설정 - DAGs 폴더와 같은 레벨에 있는 경로
+# 각 폴더 경로 설정
 SCRIPTS_FOLDER = os.path.join(AIRFLOW_HOME, "scripts")
 DATA_FOLDER = os.path.join(AIRFLOW_HOME, "data")
 

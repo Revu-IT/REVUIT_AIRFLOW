@@ -5,6 +5,7 @@ import pandas as pd
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, TrainingArguments, Trainer
 
 
+# ⚠️ 각자 이커머스명으로 변경
 AIRFLOW_HOME = "/opt/airflow"
 DATA_FOLDER = os.path.join(AIRFLOW_HOME, "data")
 MODEL_FOLDER = os.path.join(AIRFLOW_HOME, "model")
