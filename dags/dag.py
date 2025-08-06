@@ -1,15 +1,17 @@
-from airflow import DAG
-from airflow.operators.python import PythonOperator
-from datetime import datetime
 import os
 import sys
 import importlib.util
 import boto3
 from botocore.exceptions import NoCredentialsError
 from dotenv import load_dotenv
+from airflow import DAG
+from airflow.operators.python import PythonOperator
+from datetime import datetime
+
 
 # 에어플로우 환경 경로 설정
 AIRFLOW_HOME = "/opt/airflow"
+load_dotenv(os.path.join(AIRFLOW_HOME, ".env"))
 DAGS_FOLDER = os.path.join(AIRFLOW_HOME, "dags")
 
 # 각 폴더 경로 설정
@@ -83,7 +85,7 @@ def upload_results_to_s3():
     result_file = os.path.join(DATA_FOLDER, "11_review_result.csv") # 각자 이커머스에 맞게 수정
     if not os.path.exists(result_file):
         raise FileNotFoundError(f"11_review_result.csv 파일이 존재하지 않습니다: {result_file}")
-    
+
     company_name = os.getenv("COMPANY_NAME", "default_company")
     bucket_name = os.getenv("S3_BUCKET_NAME")
     aws_access_key = os.getenv("AWS_ACCESS_KEY_ID")
