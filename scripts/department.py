@@ -18,7 +18,7 @@ REVIEW_PATH = os.path.join(DATA_FOLDER, f"{COMPANY_NAME}_review_result.csv")
 
 # LangChain LLM 객체 생성
 llm = ChatOpenAI(
-    model="gpt-4o-mini",
+    model="gpt-3.5-turbo",
     openai_api_key=os.getenv("OPENAI_API_KEY"),
     temperature=0.0
 )
