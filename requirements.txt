@@ -1,8 +1,4 @@
 google-play-scraper
-google-auth
-google-auth-oauthlib
-google-auth-httplib2
-google-api-python-client
 emoji
 konlpy
 JPype1
@@ -10,7 +6,6 @@ transformers[torch]
 torch
 numpy
 openai
-boto3
 python-dotenv
 langsmith
 langchain-openai
