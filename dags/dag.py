@@ -36,7 +36,7 @@ company_mapping = {
     "11st": 4,
     "temu": 5
 }
-COMPANY_NAME = os.getenv("COMPANY_NAME", "coupang").lower()
+COMPANY_NAME = os.getenv("COMPANY_NAME", "gmarket").lower()
 COMPANY_ID = company_mapping.get(COMPANY_NAME, 1)
 
 # 스크립트 모듈 로드 및 실행 함수

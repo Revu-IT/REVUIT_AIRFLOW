@@ -1,7 +1,13 @@
+import os
 import pandas as pd
+from dotenv import load_dotenv
 
-DEPT_INFO_PATH = r'data\department_info.csv'
-REVIEW_PATH = r'data\g_review_result.csv'
+load_dotenv()
+
+COMPANY_NAME = os.getenv("COMPANY_NAME", "coupang").lower()
+DATA_FOLDER = "data"
+REVIEW_PATH = os.path.join(DATA_FOLDER, f"{COMPANY_NAME}_review_result.csv")
+DEPT_INFO_PATH = os.path.join(DATA_FOLDER, "department_info.csv")
 
 # 부서 정보 로드
 dept_df = pd.read_csv(DEPT_INFO_PATH, encoding='utf-8-sig')
