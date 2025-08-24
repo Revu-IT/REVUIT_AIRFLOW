@@ -12,3 +12,6 @@ numpy
 openai
 boto3
 python-dotenv
+langsmith
+langchain-openai
+psycopg2-binary

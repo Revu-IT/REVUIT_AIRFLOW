@@ -82,9 +82,9 @@ def run_department_classification():
 def upload_results_to_s3():
     print(f"데이터 폴더 경로: {DATA_FOLDER}")
 
-    result_file = os.path.join(DATA_FOLDER, "11_review_result.csv") # 각자 이커머스에 맞게 수정
+    result_file = os.path.join(DATA_FOLDER, "g_review_result.csv") # 각자 이커머스에 맞게 수정
     if not os.path.exists(result_file):
-        raise FileNotFoundError(f"11_review_result.csv 파일이 존재하지 않습니다: {result_file}")
+        raise FileNotFoundError(f"g_review_result.csv 파일이 존재하지 않습니다: {result_file}")
 
     company_name = os.getenv("COMPANY_NAME", "default_company")
     bucket_name = os.getenv("S3_BUCKET_NAME")

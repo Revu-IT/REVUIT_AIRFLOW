@@ -5,8 +5,8 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 
-app_id = 'com.elevenst'
-file_path = '/opt/airflow/data/11_review_result.csv' # 각자 이커머스에 맞게 수정
+app_id = 'com.ebay.kr.gmarket'
+file_path = '/opt/airflow/data/g_review_result.csv' # 각자 이커머스에 맞게 수정
 BATCH_SIZE = 200
 TARGET_COUNT = 30_500
 
