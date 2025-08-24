@@ -13,7 +13,8 @@ load_dotenv("/opt/airflow/.env", override=True)
 AIRFLOW_HOME = "/opt/airflow"
 DATA_FOLDER = os.path.join(AIRFLOW_HOME, "data")
 DEPT_INFO_PATH = os.path.join(DATA_FOLDER, "department_info.csv")
-REVIEW_PATH = os.path.join(DATA_FOLDER, "g_review_result.csv") # 각자 이커머스에 맞게 수정
+COMPANY_NAME = os.getenv("COMPANY_NAME", "coupang").lower()
+REVIEW_PATH = os.path.join(DATA_FOLDER, f"{COMPANY_NAME}_review_result.csv")
 
 # LangChain LLM 객체 생성
 llm = ChatOpenAI(

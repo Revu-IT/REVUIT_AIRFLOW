@@ -5,8 +5,10 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 
-app_id = 'com.ebay.kr.gmarket'
-file_path = '/opt/airflow/data/g_review_result.csv' # 각자 이커머스에 맞게 수정
+COMPANY_NAME = os.getenv("COMPANY_NAME", "gmarket").lower()
+APP_ID = os.getenv("APP_ID", "com.ebay.kr.gmarket")
+DATA_FOLDER = "/opt/airflow/data"
+file_path = os.path.join(DATA_FOLDER, f"{COMPANY_NAME}_review_result.csv")
 BATCH_SIZE = 200
 TARGET_COUNT = 30_500
 
@@ -39,7 +41,7 @@ token = None
 
 while len(all_reviews) < TARGET_COUNT:
     result, token = reviews(
-        app_id,
+        APP_ID,
         lang='ko',
         country='kr',
         sort=Sort.NEWEST,
@@ -73,7 +75,6 @@ else:
         'thumbsUpCount': 'like',
     })
     df_new = df_new[['score', 'date', 'content', 'like']]
-    df_new['type'] = 1
     df_new['cleaned_text'] = np.nan
     df_new['positive'] = np.nan
 

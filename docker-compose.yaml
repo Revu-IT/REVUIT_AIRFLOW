@@ -19,6 +19,7 @@ x-airflow-common: &airflow-common
     AWS_REGION: ${AWS_REGION}
     # 이커머스
     COMPANY_NAME: ${COMPANY_NAME}
+    APP_ID: ${APP_ID}
     # PostgreSQL
     PG_HOST: ${PG_HOST}
     PG_PORT: ${PG_PORT}
