@@ -4,13 +4,12 @@ import numpy as np
 import pandas as pd
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, TrainingArguments, Trainer
 
-
-# ⚠️ 각자 이커머스명으로 변경
 AIRFLOW_HOME = "/opt/airflow"
 DATA_FOLDER = os.path.join(AIRFLOW_HOME, "data")
 MODEL_FOLDER = os.path.join(AIRFLOW_HOME, "model")
-INPUT_PATH = os.path.join(DATA_FOLDER, "11_review_result.csv") # 각자 이커머스에 맞게 수정
-OUTPUT_PATH = os.path.join(DATA_FOLDER, "11_review_result.csv") # 각자 이커머스에 맞게 수정
+COMPANY_NAME = os.getenv("COMPANY_NAME", "coupang").lower()
+INPUT_PATH = os.path.join(DATA_FOLDER, f"{COMPANY_NAME}_review_result.csv")
+OUTPUT_PATH = os.path.join(DATA_FOLDER, f"{COMPANY_NAME}_review_result.csv")
 MODEL_PATH = os.path.join(MODEL_FOLDER, "bert")
 TOKENIZER_PATH = os.path.abspath(os.path.join(MODEL_FOLDER, "tokenizer"))
 

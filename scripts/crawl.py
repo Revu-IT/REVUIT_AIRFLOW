@@ -6,7 +6,9 @@ import numpy as np
 from datetime import datetime
 
 app_id = 'com.elevenst'
-file_path = '/opt/airflow/data/11_review_result.csv' # 각자 이커머스에 맞게 수정
+COMPANY_NAME = os.getenv("COMPANY_NAME", "coupang").lower()
+DATA_FOLDER = "/opt/airflow/data"
+file_path = os.path.join(DATA_FOLDER, f"{COMPANY_NAME}_review_result.csv")
 BATCH_SIZE = 200
 TARGET_COUNT = 30_500
 
@@ -73,7 +75,6 @@ else:
         'thumbsUpCount': 'like',
     })
     df_new = df_new[['score', 'date', 'content', 'like']]
-    df_new['type'] = 1
     df_new['cleaned_text'] = np.nan
     df_new['positive'] = np.nan
 

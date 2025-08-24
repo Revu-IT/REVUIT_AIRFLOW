@@ -4,9 +4,8 @@ from datetime import datetime
 import os
 import sys
 import importlib.util
-import boto3
-from botocore.exceptions import NoCredentialsError
-from dotenv import load_dotenv
+import csv
+import psycopg2
 
 # 에어플로우 환경 경로 설정
 AIRFLOW_HOME = "/opt/airflow"
@@ -21,6 +20,24 @@ CRAWL_SCRIPT = os.path.join(SCRIPTS_FOLDER, "crawl.py")
 OKT_SCRIPT = os.path.join(SCRIPTS_FOLDER, "okt.py")
 SENTIMENT_SCRIPT = os.path.join(SCRIPTS_FOLDER, "sentiment.py")
 DEPARTMENT_SCRIPT = os.path.join(SCRIPTS_FOLDER, "department.py")
+
+# PostgreSQL 연결 정보 (환경변수에서 불러오기)
+PG_HOST = os.getenv("PG_HOST")
+PG_PORT = os.getenv("PG_PORT", "5432")
+PG_DB = os.getenv("PG_DB")
+PG_USER = os.getenv("PG_USER")
+PG_PASSWORD = os.getenv("PG_PASSWORD")
+
+# 회사명 → ID 매핑
+company_mapping = {
+    "coupang": 1,
+    "aliexpress": 2,
+    "gmarket": 3,
+    "11st": 4,
+    "temu": 5
+}
+COMPANY_NAME = os.getenv("COMPANY_NAME", "coupang").lower()
+COMPANY_ID = company_mapping.get(COMPANY_NAME, 1)
 
 # 스크립트 모듈 로드 및 실행 함수
 def execute_python_script(script_path):
@@ -76,48 +93,81 @@ def run_department_classification():
     print(f"부서 분류 스크립트 실행 중... 경로: {DEPARTMENT_SCRIPT}")
     execute_python_script(DEPARTMENT_SCRIPT)
 
-# S3 업로드
-def upload_results_to_s3():
-    print(f"데이터 폴더 경로: {DATA_FOLDER}")
-
-    result_file = os.path.join(DATA_FOLDER, "11_review_result.csv") # 각자 이커머스에 맞게 수정
+# PostgreSQL 업로드
+def insert_results_to_postgres():
+    result_file = os.path.join(DATA_FOLDER, f"{COMPANY_NAME}_review_result.csv")
     if not os.path.exists(result_file):
-        raise FileNotFoundError(f"11_review_result.csv 파일이 존재하지 않습니다: {result_file}")
-    
-    company_name = os.getenv("COMPANY_NAME", "default_company")
-    bucket_name = os.getenv("S3_BUCKET_NAME")
-    aws_access_key = os.getenv("AWS_ACCESS_KEY_ID")
-    aws_secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
-    aws_region = os.getenv("AWS_REGION")
+        raise FileNotFoundError(f"CSV 파일이 존재하지 않습니다: {result_file}")
 
-    if not bucket_name:
-        raise ValueError("S3_BUCKET_NAME 환경 변수가 설정되지 않았습니다")
-
-    s3_key = f"airflow/{company_name}.csv"
-    print(f"업로드 대상 S3 경로: s3://{bucket_name}/{s3_key}")
-
-    # boto3 클라이언트 생성
-    s3 = boto3.client(
-        "s3",
-        aws_access_key_id=aws_access_key,
-        aws_secret_access_key=aws_secret_key,
-        region_name=aws_region
+    conn = psycopg2.connect(
+        host=PG_HOST, dbname=PG_DB, user=PG_USER, password=PG_PASSWORD, port=PG_PORT
     )
+    cursor = conn.cursor()
 
-    try:
-        s3.upload_file(result_file, bucket_name, s3_key)
-        print(f"✅ S3 업로드 성공: s3://{bucket_name}/{s3_key}")
-    except NoCredentialsError:
-        print("❌ AWS 자격 증명이 누락되었습니다.")
-        raise
-    except Exception as e:
-        print(f"❌ 업로드 실패: {str(e)}")
-        raise
+    # 부서 매핑
+    cursor.execute("SELECT id, name FROM department;")
+    department_map = {name: dep_id for dep_id, name in cursor.fetchall()}
+    print(f"✅ Department 매핑 완료: {department_map}")
+
+    with open(result_file, "r", encoding="utf-8-sig") as f:
+        reader = csv.DictReader(f)
+        reader.fieldnames = [name.strip() for name in reader.fieldnames]
+
+        for row in reader:
+            row = {k.strip(): v for k, v in row.items()}
+            department_name = row.get("department")
+            department_id = department_map.get(department_name)
+            if department_id is None:
+                print(f"❌ 매핑 실패: {department_name}")
+                continue
+
+            # 중복 체크
+            cursor.execute(
+                "SELECT 1 FROM reviews WHERE date=%s AND content=%s AND company_id=%s",
+                (row.get("date"), row.get("content"), COMPANY_ID)
+            )
+            if cursor.fetchone():
+                continue
+
+            score_value = row.get("score")
+            score = float(score_value) if score_value else None
+
+            likes_value = row.get("like")
+            try:
+                likes = int(float(likes_value)) if likes_value else 0
+            except ValueError:
+                likes = 0
+
+            positive_value = str(row.get("positive")).strip().lower()
+            is_positive = positive_value in ["1", "1.0", "true", "t", "yes"]
+
+            cursor.execute(
+                """
+                INSERT INTO reviews
+                (date, score, content, likes, cleaned_text, positive, department_id, company_id)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                """,
+                (
+                    row.get("date"),
+                    score,
+                    row.get("content"),
+                    likes,
+                    row.get("cleaned_text"),
+                    is_positive,
+                    department_id,
+                    COMPANY_ID
+                )
+            )
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+    print("✅ 새로운 CSV 데이터만 PostgreSQL에 저장 완료")
 
 # DAG 정의
 with DAG(
     dag_id="revuit_pipeline_controller",
-    schedule_interval="0 9 * * *",  # 매일 아침 9시
+    schedule_interval="0 9 * * *",
     start_date=datetime(2023, 1, 1),
     catchup=False,
     tags=["pipeline"]
@@ -143,10 +193,9 @@ with DAG(
         python_callable=run_department_classification
     )
     
-    upload_to_s3 = PythonOperator(
-        task_id="upload_results_to_s3",
-        python_callable=upload_results_to_s3
+    insert_to_postgres = PythonOperator(
+        task_id="insert_results_to_postgres",
+        python_callable=insert_results_to_postgres
     )
     
-    # 태스크 의존성 설정
-    crawling >> general_preprocessing >> sentiment_preprocessing >> department_classification >> upload_to_s3
+    crawling >> general_preprocessing >> sentiment_preprocessing >> department_classification >> insert_to_postgres

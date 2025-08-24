@@ -7,9 +7,10 @@ from openai import OpenAI
 AIRFLOW_HOME = "/opt/airflow"
 DATA_FOLDER = os.path.join(AIRFLOW_HOME, "data")
 DEPT_INFO_PATH = os.path.join(DATA_FOLDER, "department_info.csv")
-REVIEW_PATH = os.path.join(DATA_FOLDER, "11_review_result.csv") # 각자 이커머스에 맞게 수정
+COMPANY_NAME = os.getenv("COMPANY_NAME", "coupang").lower()
+REVIEW_PATH = os.path.join(DATA_FOLDER, f"{COMPANY_NAME}_review_result.csv")
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))  # .env에 API 키 설정
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # 부서 기준 정보 불러오기
 dept_df = pd.read_csv(DEPT_INFO_PATH, encoding="utf-8-sig")

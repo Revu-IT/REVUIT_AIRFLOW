@@ -13,12 +13,19 @@ x-airflow-common: &airflow-common
     AIRFLOW__CORE__LOAD_EXAMPLES: "true"
     AIRFLOW__API__AUTH_BACKENDS: "airflow.api.auth.backend.basic_auth"
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
-    # AWS & S3 환경변수 추가
+    # AWS
     AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
     AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
     AWS_REGION: ${AWS_REGION}
-    S3_BUCKET_NAME: ${S3_BUCKET_NAME}
+    # 이커머스
     COMPANY_NAME: ${COMPANY_NAME}
+    # PostgreSQL
+    PG_HOST: ${PG_HOST}
+    PG_PORT: ${PG_PORT}
+    PG_DB: ${PG_DB}
+    PG_USER: ${PG_USER}
+    PG_PASSWORD: ${PG_PASSWORD}
+
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs

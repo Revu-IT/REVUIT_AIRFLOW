@@ -6,6 +6,10 @@ from konlpy.tag import Okt
 
 okt = Okt()
 
+COMPANY_NAME = os.getenv("COMPANY_NAME", "coupang").lower()
+DATA_FOLDER = "/opt/airflow/data"
+REVIEW_PATH = os.path.join(DATA_FOLDER, f"{COMPANY_NAME}_review_result.csv")
+
 # 불용어 리스트
 stopwords = [
     '너무', '정말', '그냥', '그리고', '때문에', '또는', '이런', '저런', '해서',
@@ -73,4 +77,4 @@ def preprocess_reviews(path):
     print(f"✅ 최종 저장 완료: {path}, 총 {len(df_all)}개")
 
 # 사용 예시
-preprocess_reviews('/opt/airflow/data/11_review_result.csv') # 각자 이커머스에 맞게 수정
+preprocess_reviews(REVIEW_PATH) # 각자 이커머스에 맞게 수정
