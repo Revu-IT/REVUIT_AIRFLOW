@@ -21,7 +21,7 @@ OKT_SCRIPT = os.path.join(SCRIPTS_FOLDER, "okt.py")
 SENTIMENT_SCRIPT = os.path.join(SCRIPTS_FOLDER, "sentiment.py")
 DEPARTMENT_SCRIPT = os.path.join(SCRIPTS_FOLDER, "department.py")
 
-# PostgreSQL 연결 정보 (환경변수에서 불러오기)
+# PostgreSQL 연결 정보
 PG_HOST = os.getenv("PG_HOST")
 PG_PORT = os.getenv("PG_PORT", "5432")
 PG_DB = os.getenv("PG_DB")
@@ -104,10 +104,12 @@ def insert_results_to_postgres():
     )
     cursor = conn.cursor()
 
-    # 부서 매핑
-    cursor.execute("SELECT id, name FROM department;")
-    department_map = {name: dep_id for dep_id, name in cursor.fetchall()}
-    print(f"✅ Department 매핑 완료: {department_map}")
+    batch_size = 1000
+    batch_count = 0
+    total_count = 0
+
+    review_values = []
+    review_department_values = []
 
     with open(result_file, "r", encoding="utf-8-sig") as f:
         reader = csv.DictReader(f)
@@ -115,19 +117,15 @@ def insert_results_to_postgres():
 
         for row in reader:
             row = {k.strip(): v for k, v in row.items()}
-            department_name = row.get("department")
-            department_id = department_map.get(department_name)
-            if department_id is None:
-                print(f"❌ 매핑 실패: {department_name}")
-                continue
 
-            # 중복 체크
-            cursor.execute(
-                "SELECT 1 FROM reviews WHERE date=%s AND content=%s AND company_id=%s",
-                (row.get("date"), row.get("content"), COMPANY_ID)
-            )
-            if cursor.fetchone():
-                continue
+            departments_raw = row.get("department", "")
+            department_ids = []
+            if departments_raw:
+                department_ids = [
+                    int(dep.strip())
+                    for dep in departments_raw.split(",")
+                    if dep.strip().isdigit() and int(dep.strip()) != 0
+                ]
 
             score_value = row.get("score")
             score = float(score_value) if score_value else None
@@ -141,28 +139,68 @@ def insert_results_to_postgres():
             positive_value = str(row.get("positive")).strip().lower()
             is_positive = positive_value in ["1", "1.0", "true", "t", "yes"]
 
-            cursor.execute(
-                """
-                INSERT INTO reviews
-                (date, score, content, likes, cleaned_text, positive, department_id, company_id)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                """,
-                (
-                    row.get("date"),
-                    score,
-                    row.get("content"),
-                    likes,
-                    row.get("cleaned_text"),
-                    is_positive,
-                    department_id,
-                    COMPANY_ID
-                )
-            )
+            review_values.append((
+                row.get("date"), score, row.get("content"), likes,
+                row.get("cleaned_text"), is_positive, COMPANY_ID, department_ids
+            ))
+
+            batch_count += 1
+            total_count += 1
+
+            if batch_count % batch_size == 0:
+                for rv in review_values:
+                    cursor.execute(
+                        """
+                        INSERT INTO reviews
+                        (date, score, content, likes, cleaned_text, positive, company_id)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s)
+                        ON CONFLICT DO NOTHING
+                        RETURNING id
+                        """,
+                        rv[:7]
+                    )
+                    review_id = cursor.fetchone()
+                    if review_id:
+                        review_id = review_id[0]
+                        for dep_id in rv[7]:
+                            review_department_values.append((review_id, dep_id))
+                if review_department_values:
+                    cursor.executemany(
+                        "INSERT INTO review_department (review_id, department_id) VALUES (%s, %s) ON CONFLICT DO NOTHING",
+                        review_department_values
+                    )
+                    review_department_values.clear()
+
+                conn.commit()
+                review_values.clear()
+                print(f"✅ {total_count}건 저장 완료")
+
+    for rv in review_values:
+        cursor.execute(
+            """
+            INSERT INTO reviews
+            (date, score, content, likes, cleaned_text, positive, company_id)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            ON CONFLICT DO NOTHING
+            RETURNING id
+            """,
+            rv[:7]
+        )
+        review_id = cursor.fetchone()
+        if review_id:
+            review_id = review_id[0]
+            for dep_id in rv[7]:
+                review_department_values.append((review_id, dep_id))
+    if review_department_values:
+        cursor.executemany(
+            "INSERT INTO review_department (review_id, department_id) VALUES (%s, %s) ON CONFLICT DO NOTHING",
+            review_department_values
+        )
 
     conn.commit()
     cursor.close()
     conn.close()
-    print("✅ 새로운 CSV 데이터만 PostgreSQL에 저장 완료")
+    print(f"✅ 총 {total_count}건 저장 완료")
 
 # DAG 정의
 with DAG(
