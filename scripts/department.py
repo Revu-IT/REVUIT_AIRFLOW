@@ -8,7 +8,6 @@ from openai import OpenAI
 from langchain_openai import ChatOpenAI
 #from langsmith import traceable
 
-
 load_dotenv("/opt/airflow/.env", override=True)
 AIRFLOW_HOME = "/opt/airflow"
 DATA_FOLDER = os.path.join(AIRFLOW_HOME, "data")
