@@ -29,7 +29,7 @@ x-airflow-common: &airflow-common
     # LangChain
     LANGCHAIN_API_KEY: ${LANGCHAIN_API_KEY}
     LANGCHAIN_PROJECT: ${LANGCHAIN_PROJECT}
-    LANGCHAIN_TRACING_V2: "true"
+    LANGCHAIN_TRACING_V2: ${LANGCHAIN_TRACING_V2}
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
