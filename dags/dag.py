@@ -37,7 +37,7 @@ company_mapping = {
     "temu": 5
 }
 COMPANY_NAME = os.getenv("COMPANY_NAME", "gmarket").lower()
-COMPANY_ID = company_mapping.get(COMPANY_NAME, 1)
+COMPANY_ID = company_mapping.get(COMPANY_NAME, 3)
 
 # 스크립트 모듈 로드 및 실행 함수
 def execute_python_script(script_path):
