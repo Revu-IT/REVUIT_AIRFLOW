@@ -55,7 +55,7 @@
 #### 6. 부서별 리포트
 * 부서별 강점과 약점 네 가지를 요약하여 보여준다.<br>
 * AI가 제시한 부서별 문제 해결 방안도 확인할 수 있다.<br>
-<img src="https://github.com/user-attachments/assets/09964064-eb29-4dc9-b51a-19a44f91817a" alt="image" width="80%">
+<img src="https://github.com/user-attachments/assets/09964064-eb29-4dc9-b51a-19a44f91817a" alt="image" width="50%">
 
 <br>
 
