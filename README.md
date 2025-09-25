@@ -24,38 +24,38 @@
 ### ✨ 주요 기능
 #### 1. 메인 페이지
 * 리뷰 평점 추이, 분기별 리포트, 분기별 키워드를 한 눈에 확인할 수 있다.<br>
-<img src="https://github.com/user-attachments/assets/0dac3c91-8bb8-40a9-95f4-df2404664a59" alt="image" width="70%">
+<img src="https://github.com/user-attachments/assets/0dac3c91-8bb8-40a9-95f4-df2404664a59" alt="image" width="80%">
 
 <br>
 
 #### 2. 경쟁사 분석 (1) - 앱 순위
 * 감정 분석을 통한 긍정/부정 리뷰 비율을 기반으로 소비자가 선호하는 기업의 순위를 알 수 있다.<br>
-<img src="https://github.com/user-attachments/assets/4c0cac54-52cd-437b-adde-e7d8635a939e" alt="image" width="70%">
+<img src="https://github.com/user-attachments/assets/4c0cac54-52cd-437b-adde-e7d8635a939e" alt="image" width="80%">
 
 <br>
 
 #### 3. 경쟁사 분석 (2) - 업계 키워드 클라우드
 * 분기마다 갱신되는 이커머스 전체의 긍정/부정적인 키워드 50개를 확인할 수 있다.<br>
-<img src="https://github.com/user-attachments/assets/91be0c21-3a1b-43e8-b43b-cd480aacd6c4" alt="image" width="70%">
+<img src="https://github.com/user-attachments/assets/91be0c21-3a1b-43e8-b43b-cd480aacd6c4" alt="image" width="80%">
 
 <br>
 
 #### 4. 자사 키워드 분석
 * 최신 리뷰를 기반으로 어떤 부분이 강점/약점인지 확인할 수 있다.<br>
-<img src="https://github.com/user-attachments/assets/9bfe8575-c89a-4e41-aef8-9fb447825fc5" alt="image" width="70%">
+<img src="https://github.com/user-attachments/assets/9bfe8575-c89a-4e41-aef8-9fb447825fc5" alt="image" width="80%">
 
 <br>
 
 #### 5. 부서 분류
 * 리뷰를 부서별로 분류하여 각 부서의 담당자가 쉽게 확인할 수 있도록 한다.<br>
-<img src="https://github.com/user-attachments/assets/021e3f46-2e95-4863-8331-9649fa559220" alt="image" width="70%">
+<img src="https://github.com/user-attachments/assets/021e3f46-2e95-4863-8331-9649fa559220" alt="image" width="80%">
 
 <br>
 
 #### 6. 부서별 리포트
 * 부서별 강점과 약점 네 가지를 요약하여 보여준다.<br>
 * AI가 제시한 부서별 문제 해결 방안도 확인할 수 있다.<br>
-<img src="https://github.com/user-attachments/assets/09964064-eb29-4dc9-b51a-19a44f91817a" alt="image" width="40%">
+<img src="https://github.com/user-attachments/assets/09964064-eb29-4dc9-b51a-19a44f91817a" alt="image" width="80%">
 
 <br><br>
 
@@ -92,7 +92,7 @@
 <img src="https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=Ubuntu&logoColor=white"/> <img src="https://img.shields.io/badge/amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white"/>
 
 #### database
-<img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white"/> <img src="https://img.shields.io/badge/amazonrds-527FFF?style=for-the-badge&logo=amazonrds&logoColor=white"/>
+<img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white"/> <img src="https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=Ubuntu&logoColor=white"/> <img src="https://img.shields.io/badge/amazonrds-527FFF?style=for-the-badge&logo=amazonrds&logoColor=white"/>
 
 #### Collaboration
 <img src="https://img.shields.io/badge/Github-black?style=for-the-badge&logo=Github&logoColor=white"/> <img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=Discord&logoColor=white"/> <img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=Figma&logoColor=white"/> <img src="https://img.shields.io/badge/Notion-black?style=for-the-badge&logo=Notion&logoColor=white"/>
@@ -100,5 +100,4 @@
 <br><br>
 
 ### 🧬 시스템 구조도
-<img width="6698" height="3025" alt="(최종2) 랭체인 제거" src="https://github.com/user-attachments/assets/afdd8c06-c52b-4c12-8df3-8a8b25fb6eb3" />
-
+![image](https://github.com/user-attachments/assets/3a232ab3-9a57-47d6-9da4-f5863d955b69)
