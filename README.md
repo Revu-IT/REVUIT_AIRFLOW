@@ -55,35 +55,42 @@
 #### 6. 부서별 리포트
 * 부서별 강점과 약점 네 가지를 요약하여 보여준다.<br>
 * AI가 제시한 부서별 문제 해결 방안도 확인할 수 있다.<br>
-<img src="https://github.com/user-attachments/assets/09964064-eb29-4dc9-b51a-19a44f91817a" alt="image" width="50%">
-
-<br>
-
-### 개발기간
-2024.07.21 ~ 2024.08.06
+<img src="https://github.com/user-attachments/assets/09964064-eb29-4dc9-b51a-19a44f91817a" alt="image" width="80%">
 
 <br><br>
 
+### 📊 타임라인
+
+| 날짜     | 주요 내용 |
+|----------|-----------|
+| 2월 16일 | 아이디어 기획 및 기술 요구사항 정의서 작성 |
+| 4월 11일 | 이커머스 주요 5사의 구글 플레이 스토어 리뷰 데이터 크롤링 |
+| 4월 18일 | 자연어 처리(NLP)를 위해 데이터 OKT 형태소 분석 및 정 |
+| 5월 2일  | 리뷰 데이터 파이프라인(크롤링 → 전처리 → 감정 분석)을 Airflow 워크플로우로 배포 |
+| 5월 16일 | 리뷰 부서 분류 로직을 룰 베이스 방식에서 OpenAI 기반 자동 분류로 전환 |
+| 5월 30일 | 리뷰 데이터 파이프라인(크롤링 → 전처리 → 감정 분석 → 부서 분류)을 Airflow 워크플로우로 확장 배포 |
+| 6월 22일 | FastAPI 기반 백엔드 서버 구축 및 React 기반 프론트엔드 아키텍처 세팅 |
+| 7월 4일  | 한이음 드림업 공모전 준비 및 출품 |
+| 7월 25일 | 부서별 리포트 생성 기능을 OpenAI와 Claude 기반으로 각각 구현하고 결과를 비교·분석 |
+| 8월 8일  | 프론트엔드와 백엔드 연동 |
+| 8월 24일 | 피드백을 반영한 프로젝트 성과 점검 및 개선 |
+
+<br><br>
 
 ### 🔥 기술 스택
 
-####  ️Poksin Front-end
+####  ️Front-end
 <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=HTML5&logoColor=white"/> <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=CSS3&logoColor=white"/> <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=white"/>
 <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white"/> <img src="https://img.shields.io/badge/netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white"/>
 
-#### Poksin Back-end
+#### Back-end
 <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/spring Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> <img src="https://img.shields.io/badge/JPA-6DB33F?style=for-the-badge&logo=JPA&logoColor=white"/>
 <img src="https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=Ubuntu&logoColor=white"/>   <img src="https://img.shields.io/badge/amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white"/>
 <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=Docker&logoColor=white">
 
-#### AI-Server
+#### Airflow
 <img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white"> <img src="https://img.shields.io/badge/fastapi-009688?style=for-the-badge&logo=fastapi&logoColor=white"> 
 <img src="https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=Ubuntu&logoColor=white"/>  <img src="https://img.shields.io/badge/amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white"/>
-
-#### Poksin Webcam
-<img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=HTML5&logoColor=white"/> <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=CSS3&logoColor=white"/> <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=white"/>
-<img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white"> <img src="https://img.shields.io/badge/django-092E20?style=for-the-badge&logo=django&logoColor=white"> <img src="https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=Ubuntu&logoColor=white"/> <img src="https://img.shields.io/badge/amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white"/>
-
 
 #### database
 <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white"/> <img src="https://img.shields.io/badge/amazonrds-527FFF?style=for-the-badge&logo=amazonrds&logoColor=white"/>
