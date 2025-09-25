@@ -10,14 +10,14 @@
 <br><br>
 
 ### 📙 프로젝트 소개
-본 프로젝트는 <u>이커머스 플랫폼의 리뷰 데이터를 자동으로 수집</u>하고 자연어 처리
-(NLP) 통해 분석 및 시각화하여 서비스의 품질 향상과 <u>사용자 경험을 지속적으로 개선하는 리뷰 분석 시스템을 구축</u>하는 것을 목표로 한다.
+본 프로젝트는 **이커머스 플랫폼의 리뷰 데이터를 자동으로 수집**하고 자연어 처리
+(NLP) 통해 분석 및 시각화하여 서비스의 품질 향상과 **사용자 경험을 지속적으로 개선하는 리뷰 분석 시스템을 구축**하는 것을 목표로 한다.
 
 <br><br>
 
 ### 🙌 개발 배경
 글로벌 이커머스 시장 경쟁 심화로 앱 리뷰와 사용자 피드백은 서비스 품질과 고객
-유지율을 좌우하는 지표로 부상하고 있다. 그러나 많은 기업이 여전히 수작업 응대에 의존해 효율성과 비용 측면에서 한계를 겪고 있다. 이에 <u>감정 분석과 키워드 도출을 통해 고객 만족도를 수치화</u>하고 시각화된 <u>리뷰 데이터를 기반으로 주요 개선점을 도출</u>한다. 궁극적으로는 고객 피드백을 전략 수립에 직접 반영하는 데이터 기반 의사결정 시스템을 구축해 플랫폼 경쟁력을 강화하고자 한다.
+유지율을 좌우하는 지표로 부상하고 있다. 그러나 많은 기업이 여전히 수작업 응대에 의존해 효율성과 비용 측면에서 한계를 겪고 있다. 이에 **감정 분석과 키워드 도출을 통해 고객 만족도를 수치화**하고 시각화된 **리뷰 데이터를 기반으로 주요 개선점을 도출**한다. 궁극적으로는 고객 피드백을 전략 수립에 직접 반영하는 데이터 기반 의사결정 시스템을 구축해 플랫폼 경쟁력을 강화하고자 한다.
 
 <br><br>
 
@@ -84,16 +84,15 @@
 <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white"/> <img src="https://img.shields.io/badge/netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white"/>
 
 #### Back-end
-<img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/spring Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> <img src="https://img.shields.io/badge/JPA-6DB33F?style=for-the-badge&logo=JPA&logoColor=white"/>
-<img src="https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=Ubuntu&logoColor=white"/>   <img src="https://img.shields.io/badge/amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white"/>
-<img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=Docker&logoColor=white">
+<img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white"/> <img src="https://img.shields.io/badge/fastapi-009688?style=for-the-badge&logo=fastapi&logoColor=white"/> 
+<img src="https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=Ubuntu&logoColor=white"/> <img src="https://img.shields.io/badge/amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white"/>
 
-#### Airflow
-<img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white"> <img src="https://img.shields.io/badge/fastapi-009688?style=for-the-badge&logo=fastapi&logoColor=white"> 
-<img src="https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=Ubuntu&logoColor=white"/>  <img src="https://img.shields.io/badge/amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white"/>
+#### Data Pipeline
+<img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white"/> <img src="https://img.shields.io/badge/Apache%20Airflow-017CEE?style=for-the-badge&logo=apacheairflow&logoColor=white"/> 
+<img src="https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=Ubuntu&logoColor=white"/> <img src="https://img.shields.io/badge/amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white"/>
 
 #### database
-<img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white"/> <img src="https://img.shields.io/badge/amazonrds-527FFF?style=for-the-badge&logo=amazonrds&logoColor=white"/>
+<img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white"/> <img src="https://img.shields.io/badge/amazonrds-527FFF?style=for-the-badge&logo=amazonrds&logoColor=white"/>
 
 #### Collaboration
 <img src="https://img.shields.io/badge/Github-black?style=for-the-badge&logo=Github&logoColor=white"/> <img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=Discord&logoColor=white"/> <img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=Figma&logoColor=white"/> <img src="https://img.shields.io/badge/Notion-black?style=for-the-badge&logo=Notion&logoColor=white"/>
