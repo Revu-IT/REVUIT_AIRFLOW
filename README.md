@@ -24,40 +24,38 @@
 ### ✨ 주요 기능
 #### 1. 메인 페이지
 * 리뷰 평점 추이, 분기별 리포트, 분기별 키워드를 한 눈에 확인할 수 있다.<br>
-<img width="1688" height="1058" alt="image" src="https://github.com/user-attachments/assets/0dac3c91-8bb8-40a9-95f4-df2404664a59" />
-
+<img src="https://github.com/user-attachments/assets/0dac3c91-8bb8-40a9-95f4-df2404664a59" alt="image" width="80%">
 
 <br>
 
 #### 2. 경쟁사 분석 (1) - 앱 순위
 * 감정 분석을 통한 긍정/부정 리뷰 비율을 기반으로 소비자가 선호하는 기업의 순위를 알 수 있다.<br>
-<img width="1870" height="978" alt="image" src="https://github.com/user-attachments/assets/4c0cac54-52cd-437b-adde-e7d8635a939e" />
-
+<img src="https://github.com/user-attachments/assets/4c0cac54-52cd-437b-adde-e7d8635a939e" alt="image" width="80%">
 
 <br>
 
 #### 3. 경쟁사 분석 (2) - 업계 키워드 클라우드
 * 분기마다 갱신되는 이커머스 전체의 긍정/부정적인 키워드 50개를 확인할 수 있다.<br>
-<img width="1756" height="1058" alt="image" src="https://github.com/user-attachments/assets/91be0c21-3a1b-43e8-b43b-cd480aacd6c4" />
+<img src="https://github.com/user-attachments/assets/91be0c21-3a1b-43e8-b43b-cd480aacd6c4" alt="image" width="80%">
 
 <br>
 
 #### 4. 자사 키워드 분석
 * 최신 리뷰를 기반으로 어떤 부분이 강점/약점인지 확인할 수 있다.<br>
-<img width="1856" height="1168" alt="image" src="https://github.com/user-attachments/assets/9bfe8575-c89a-4e41-aef8-9fb447825fc5" />
+<img src="https://github.com/user-attachments/assets/9bfe8575-c89a-4e41-aef8-9fb447825fc5" alt="image" width="80%">
 
 <br>
 
 #### 5. 부서 분류
 * 리뷰를 부서별로 분류하여 각 부서의 담당자가 쉽게 확인할 수 있도록 한다.<br>
-<img width="1838" height="1172" alt="image" src="https://github.com/user-attachments/assets/021e3f46-2e95-4863-8331-9649fa559220" />
+<img src="https://github.com/user-attachments/assets/021e3f46-2e95-4863-8331-9649fa559220" alt="image" width="80%">
 
 <br>
 
 #### 6. 부서별 리포트
 * 부서별 강점과 약점 네 가지를 요약하여 보여준다.<br>
 * AI가 제시한 부서별 문제 해결 방안도 확인할 수 있다.<br>
-<img width="1160" height="1264" alt="image" src="https://github.com/user-attachments/assets/09964064-eb29-4dc9-b51a-19a44f91817a" />
+<img src="https://github.com/user-attachments/assets/09964064-eb29-4dc9-b51a-19a44f91817a" alt="image" width="80%">
 
 <br>
 
